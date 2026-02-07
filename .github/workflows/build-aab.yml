@@ -1,0 +1,32 @@
+name: Build Signed AAB
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: '11'
+
+      - name: Decode keystore
+        run: |
+          echo "${{ secrets.MY_RELEASE_KEY }}" | base64 --decode > my-release-key.jks
+
+      - name: Build Signed AAB
+        run: ./gradlew bundleRelease \
+          -Pandroid.injected.signing.store.file=my-release-key.jks \
+          -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
+          -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
+          -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
+
