@@ -1,21 +1,26 @@
+// app/build.gradle
+plugins {
+    id 'com.android.application'
+}
+
 android {
-    compileSdkVersion 35
+    namespace 'com.eko27.app'
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.eko27.app"
-        minSdkVersion 21
-        targetSdkVersion 35
+        minSdk 21
+        targetSdk 35
         versionCode 1
         versionName "1.0"
     }
 
-    // SIGNING CONFIG
     signingConfigs {
         release {
-            storeFile file("my-release-key.jks") // Sizning keystore faylingiz
-            storePassword "2010abbos"
-            keyAlias "abboskey"
-            keyPassword "2010abbos"
+            storeFile file("my-release-key.jks")
+            storePassword System.getenv("KEYSTORE_PASSWORD")
+            keyAlias System.getenv("KEY_ALIAS")
+            keyPassword System.getenv("KEY_PASSWORD")
         }
     }
 
@@ -27,20 +32,18 @@ android {
         }
     }
 
-    namespace "com.eko27.app"
-
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
